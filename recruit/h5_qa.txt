@@ -1,0 +1,172 @@
+1.HTML5 为什么只需要写 <!DOCTYPE HTML>？
+答案解析：
+HTML5不基于SGML，因此不需要对DTD进行引用，但是需要DOCTYPE来规范浏览器的行为（让浏览器按照他们应该的方式来运行）而HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器文档所使用的文档类型。
+
+2、行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？
+答案解析：
+行内元素：a  b  span  img  input  select  strong
+块级元素：div  ul  ol  li  dl  dt  dd  h1  h2  h3  h4  p  等
+空元素：<br>  <hr>  <img>  <link> <meta>
+
+3、html5有哪些新特性、移除了那些元素？如何处理HTML5新标签的浏览器兼容问题？
+答案解析：
+新特性，新增元素：
+1）内容元素：article、footer、header、nav、section
+2）表单控件：calendar、date、time、email、url、search
+3）控件元素：webworker，websockt，Geolocation
+
+移除元素：
+1）显现层元素：basefont，big，center，font，s，strike，tt，u
+2）性能较差元素：frame，frameset，noframes
+
+4、HTML5的离线储存怎么使用，工作原理能不能解释一下？
+答案解析：
+localStorage 长期存储数据，浏览器关闭后数据不丢失；
+sessionStorage 数据在浏览器关闭后自动删除。
+
+5、如何实现浏览器内多个标签页之间的通信？
+答案解析：
+调用localstorge、cookies等本地存储方式
+
+6、介绍一下 CSS 的盒子模型？
+答案解析：
+1）有两种，IE 盒子模型、标准 W3C 盒子模型； IE 的 content 部分包含了 border 和 padding；
+2）盒模型：内容（content）、填充（padding）、边界（margin）、边框（border）。
+
+7、css3有哪些新特性？
+答案解析：
+CSS3 实现圆角（border-radius:8px;），阴影（box-shadow:10px）,对文字加特效（text-shadow）,线性渐变（gradient），旋转（transform）
+
+8、简述同步和异步的区别
+答案解析：
+同步是阻塞模式，异步是非阻塞模式。
+同步就是指一个进程在执行某个请求的时候，若该请求需要一段时间才能返回信息，那么这个进程将会一直等待下去，直到收到返回信息才继续执行下去；
+异步是指进程不需要一直等下去，而是继续执行下面的操作，不管其他进程的状态。当有消息返回时系统会通知进程进行处理，这样可以提高执行的效率。
+
+9.HTML5 应用程序缓存和浏览器缓存有什么区别？
+HTML5 引入了应用程序缓存，这意味着 web 应用可进行缓存，并可在没有因特网连接时进行访问。
+应用程序缓存为应用带来三个优势：
+　　离线浏览 - 用户可在应用离线时使用它们
+　　速度 - 已缓存资源加载得更快
+　　减少服务器负载 - 浏览器将只从服务器下载更新过或更改过的资源。
+它的实现借助于 manifest 文件，如下：
+<!doctype html>
+<html manifest=”example.appcache”>
+…..
+</html>
+
+10.我们在跟后端进行异步请求时，很容易陷入嵌套太深的陷阱？
+
+11.在项目开发完成之后，根据雅虎性能优化规则，需要对html，JS，CSS，图片需要做出怎样的处理？是否可以借助构建工具实现自动化？
+提示：从减少http请求、减少带宽、提高加载速度等方面进行答题即可。对于自动化，可以使用gulp构建工具！
+
+12.项目测试没问题，但是放到线上就有问题了，你是怎么解决的？？
+13.请优化某页面的加载速度。
+
+1).JS、CSS、HTML做gzip压缩（不要对图片进行Gzip压缩）
+2).删除js、css、html文件的注释，回车符，以及无效字节
+3).javascript放置网页底部，避免阻塞下载
+4).CSS放到header中，避免白屏
+5).合并JS和CSS；压缩JS和CSS；
+6).优化缓存：对没有变化的css、js，图片等网页元素，直接利用客户端的浏览器缓存读取来有效减少http请求数。
+7).通过增加expires header（给文件加上关于过期时间的header报文）可以告诉浏览器，那些网页元素可以缓存和缓存多长时间。
+8).采用CSS sprites（CSS Sprites其实就是把网页中一些背景图片整合到一张图片文件中）技术来实现。
+9).把脚本和图片放在不同的服务器和域名，做成并行下载。
+10).利用H5的缓存技术
+
+14.优先级算法 
+1).选择器都有一个权值，权值越大越优先；
+2).当权值相等时，后出现的样式表设置要优于先出现的样式表设置；
+3).创作者的规则高于浏览者：即网页编写者设置的CSS 样式的优先权高于浏览器所设置的样式；
+4).继承的CSS 样式不如后来指定的CSS 样式；
+5).在同一组属性设置中标有“!important”规则的优先级最大；
+
+
+
+
+1.不使用loop循环，创建一个长度为100的数组，并且每个元素的值等于它的下标。
+2.有一个长度为100的数组，请以优雅的方式求出该数组的前10个元素之和
+3.请把<ul><li>第1行</li><li>第2行</li>...</ul>（ul之间有10个li元素）插入body里面，注意：需要考虑到性能问题。
+4.下面代码会输出什么：
+var test = (function(a) {
+    this.a = a;
+    return function(b) {
+        return this.a + b;
+    }
+} (function(a, b) {
+    return a;
+}(1, 2))); 
+console.log(test(4)); //输出什么？？？？
+
+5.完成一个正则表达式，验证用户是否输入正确的身份证号码。
+var string='35021119920102353X';
+var stringExp=new RegExp(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/);
+alert(stringExp.test(string)); //true
+6.对 string 对象进行扩展，使其具有删除前后空格的方法。 
+String.prototype.trim=function(){
+    return this.replace(/(^\s*)|(\s*$)/g, "");
+} 
+7.如何居中 DIV ?如何居中一个浮动元素？请实现
+<div class="div"><div class="con"></div></div>
+
+//绝对定位，负边距（这种方式实际项目中不可以）
+.div{width:200px;height: 200px;position:absolute;left:50%;top:50%;margin:-100px 0 0 -100px}
+//父元素和子元素同时左浮动，然后父元素相对左移动50%，再然后子元素相对右移动50%，或者子元素相对左移动-50%也就可以了
+.div{position: relative;left:50%;float: left;}
+.con{width:200px;height: 200px;float:left;position:relative;right:50%;background: #000}
+
+<div class="div"><div class="con"></div></div>
+8.用js写个原生的ajax过程 
+window.onload=function(){
+    document.getElementsByTagName('a')[0].onclick=function(){
+        if (window.XMLHttpRequest){
+            var xmlhttp=new XMLHttpRequest();
+        }else{
+            var xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        var method='GET';
+        var url=this.href;
+        xmlhttp.open(method,url);
+        xmlhttp.send();
+        xmlhttp.onreadystatechange=function(){
+            if(xmlhttp.readyState==4){
+                if(xmlhttp.status==200||xmlhttp.status==304){
+                    var txt=xmlhttp.responseText;
+                    var json=eval('('+txt+')');
+                    document.getElementById('name').innerHTML='姓名'+json.ruei.name;
+                    document.getElementById('age').innerHTML='年龄'+json.ruei.age;
+                    document.getElementById('job').innerHTML='工作'+json.ruei.job;
+                }
+            }
+        }
+        return false;
+    }
+}    
+9.请实现，鼠标点击页面中的任意标签，alert 该标签的名称（注意兼容性）
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>alert标签名</title>
+</head>
+<body>
+    <div>div</div>
+    <a href="javascript:;">a</a>
+    <b>b</b>
+    <script>
+    function elementName(evt){  
+          evt = evt|| window.event;   // IE: window.event  
+          // IE用srcElement获取事件源，而FF用target获取事件源  
+          var selected = evt.target || evt.srcElement;  
+          alert(selected.tagName);  
+      }  
+      window.onload = function(){  
+          var el =document.getElementsByTagName('body');  
+          el[0].onclick = elementName;
+      }
+    </script>
+</body>
+</html>
+
+
+ 

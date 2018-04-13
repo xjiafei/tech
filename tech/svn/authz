@@ -1,0 +1,97 @@
+### This file is an example authorization file for svnserve.
+### Its format is identical to that of mod_authz_svn authorization
+### files.
+### As shown below each section defines authorizations for the path and
+### (optional) repository specified by the section name.
+### The authorizations follow. An authorization line can refer to:
+###  - a single user,
+###  - a group of users defined in a special [groups] section,
+###  - an alias defined in a special [aliases] section,
+###  - all authenticated users, using the '$authenticated' token,
+###  - only anonymous users, using the '$anonymous' token,
+###  - anyone, using the '*' wildcard.
+###
+### A match can be inverted by prefixing the rule with '~'. Rules can
+### grant read ('r') access, read-write ('rw') access, or no access
+### ('').
+
+[aliases]
+# joe = /C=XZ/ST=Dessert/L=Snake City/O=Snake Oil, Ltd./OU=Research Institute/CN=Joe Average
+
+[groups]
+# harry_and_sally = harry,sally
+# harry_sally_and_joe = harry,sally,&joe
+dev=david,tod,alan,robinson,richard,rod,jim,danal,cyrus,tiger,floy,hugh,lex,neil,dragon,flyer,jack,gary,macky,trevin
+manage=bob,page,howard,danal,henry,king
+flash_game_group=page,robinson,alan,jim
+ios_group=danal,cyrus,macky,kevin
+android_group=sea,jeven,jack,trevin
+mobile_mgr=danal,sea
+
+[/]
+@dev=rw
+@manage=rw
+
+[/FlashGame]
+@dev=rw
+
+[/Flash]
+@flash_game_group=rw
+
+[/Lottery(IOS)/trunk]
+@ios_group=rw
+
+[/Lottery(IOS)/branches]
+@ios_group=rw
+
+[/Lottery(Android)]
+@android_group=rw
+
+[/Lottery(Android)/trunk]
+@android_group=rw
+
+[/Lottery(Android)/branches]
+@android_group=rw
+
+[/Encryption(IOS)]
+@ios_group=rw
+
+[/Encryption(Java)]
+@dev=rw
+
+[/Encryption(Android)]
+@android_group=rw
+
+[/Enjoyitech.com]
+@dev=rw
+
+[/IOS]
+@ios_group=rw
+@android_group=rw
+
+[/Android]
+@android_group=rw
+
+[/EnjoyGame/AndroidGameLobby]
+@android_group=rw
+
+[/EnjoyGame/IOSGameLobby]
+@ios_group=rw
+
+[/EnjoyGame/JavaGamePlatform]
+@dev=rw
+
+[/EnjoyGame/games]
+@mobile_mgr=rw
+@ios_group=rw
+@android_group=rw
+
+[/Firefrog/LoginoutMock]
+@dev=rw
+
+[/CustomerService(IOS)]
+@ios_group=rw
+
+[/]
+@ios_group=rw
+

@@ -1,0 +1,10 @@
+umount /dir  提示device is busy
+原因：进程在访问（rpc在同步）
+处理：umount -l /dir（等rpc一空闲就卸载)
+
+client 新增文件 提示不可修改
+原因：nfs服务器的共享目录权限不够 
+处理：修改服务器的共享目录权限 可写
+
+
+server:http://codingstandards.iteye.com/blog/816376

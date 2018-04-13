@@ -1,0 +1,2 @@
+interface:https://192.168.6.4/svn/wqc/software/trunk/mobile/MP/interface
+mobileAdmin:https://192.168.6.4/svn/wqc/software/trunk/mobile/brancheMoblieAdmin/branch188

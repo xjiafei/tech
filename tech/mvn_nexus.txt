@@ -1,0 +1,2 @@
+1.安装nexus（tomcat服务启动）
+2.root/sonatype-work/nexus/storage/放置jar包

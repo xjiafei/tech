@@ -1,0 +1,191 @@
+    Linux下安装mantis配置指南
+1 配置Linux下的Apache+Mysql+PHP
+作为缺陷管理工具，前段时间bugzilla比较流行，但bugzilla配置比较繁琐，使用起来也是相当的繁琐。而且非常占系统资源。使用perl编写的CGI程序，所以很明显的一个缺点就是：每建立一个连接就会开启一个服务器进程。所以最近企业使用mantis的是越来越多了。使用非常方便简洁而且可以定制工作流等优点。发现网上关于在Linux下配置mantis的资料非常之少。所以经过两天的研究：成功搭建Linux下mantis，下面是简要的配置指南。不太清楚的地方，大家多多提出，我会进一步补充。
+一.安装配置Apache
+安装包的获取：http://www.apache.org
+1.1.安装Apache(tar包)
+tar –zxvf http-2.2.11.tar.gz
+./configure --prefix=/usr/local/apache --enable-modules=so --enable-rewrite
+make && make install
+1.2.配置Apache
+vi /usr/local/apache/conf/httpd.conf
+找到下面这行
+#ServerName www.example.com:80
+修改为：
+ServerName www.dong.com:80
+保存退出。
+1.3.拷贝文件
+cp –a /usr/local/apache/bin/apachectl /etc/init.d/httpd
+1.4运行service命令
+Service httpd restart
+1.5检验配置是否成功
+IE地址栏输入：http://www.dong.com
+看到It’s Work证明配置成功。
+或者使用 ps –aux|grep httpd
+如果看到多行数据，也证明配置成功
+二.安装Mysql（rpm包）
+安装包的获取: http://www.mysql.com
+2.1.检查是否安装mysql
+输入命令:
+rpm -qa |grep –i mysql
+如果有提示，证明mysql已经安装，那么使用rpm –e mysql卸载mysql包。
+因为系统安装的mysql的版本太低了。
+ 
+2.2.如果没有安装
+2.2.1.从mysql网站获取安装包：
+rpm –ivh mysql-client*
+rpm –ivh mysql-server*
+2.3启动服务
+service mysql restart
+三．安装GD库(tar包 让PHP支持GIF、PNG、JPEG)
+注意：不安装只会影响mantis的数据统计部分功能。
+安装包的获取:
+ 
+ 
+3.1安装GD库
+3.1.1.安装jpeg6（jpegsrc.v6b.tar.gz）ftp://ftp.uu.net/graphics/jpeg/     
+mkdir -p /usr/local/jpeg6
+mkdir -p /usr/local/jpeg6/bin
+mkdir -p /usr/local/jpeg6/lib
+mkdir -p /usr/local/jpeg6/include
+mkdir -p /usr/local/jpeg6/man
+mkdir -p /usr/local/jpeg6/man1
+mkdir -p /usr/local/jpeg6/man/man1
+tar –zxvf  jpegsrc.v6b.tar.gz
+./configure --prefix=/usr/local/jpeg6/ --enable-shared --enable-static
+Make &&make install
+3.1.2.安装libpng（libpng-1.2.35-i486-1.gz） http://www.libpng.org/pub/png/libpng.html
+tar –zxvf  libpng-1.2.35-i486-1.gz
+./configure --prefix=/usr/local/libpng/
+Make &&make install
+3.1.3.安装freetype（freetype-2.3.9.tar.gz） http://freetype.fis.uniroma2.it/download.html
+注意：需升级make version到3.80以上:下载地址：http://ftp.gnu.org/pub/gnu/make/
+tar –zxvf  freetype-2.3.9.tar.gz
+mkdir -p /usr/local/freetype
+./configure --prefix=/usr/local/freetype
+Make &&make install
+3.1.4.安装zlib （zlib-1.2.3.tar.gz） http://zlib.net/index.html
+tar –zxvf  zlib-1.2.3.tar.gz
+./configure --prefix=/usr/local/zlib
+Make &&make install
+3.1.5.安装GD库 (gd-2.0.35.tar.gz) http://www.libgd.org/Downloads
+注意：需要对m4升级到1.4.12. 下载地址：http://ftp.gnu.org/pub/gnu/m4/
+注意：需要对autoconf升级到2.58或者更高下载地址：http://ftp.gnu.org/pub/gnu/autoconf/
+tar –zxvf  gd-2.0.35.tar.gz
+mkdir -p /usr/local/gd2
+./configure --prefix=/usr/local/gd2 --with-jpeg=/usr/local/jpeg6/ --with-png=/usr/local/lib/ --with-zlib=/usr/local/zlib/ --with-freetype=/usr/local/freetype/
+Make &&make install
+3.1.6安装Curl库（curl-7.19.4.tar.gz） http://curl.haxx.se/download.html
+tar –zxvf  curl-7.19.4.tar.gz
+./configure --prefix=/usr/local/curl
+Make &&make install
+
+安装libxpm
+yum install libXpm-devel.x86_64
+1.rpm -ql libXpm ：查询出libXpm的安装位置，发现在/usr/lib64/ 下
+2.重新编译php，./configure中增加 --with-xpm-dir=/usr/lib64/ 
+3.make && make install 成功！
+
+四．安装PHP(tar包，PHP必须有libxml2支持)
+安装包的获取:http://www.php.net
+4.1.安装libxml2
+4.2.安装libxslt（可选安装）
+4.3.安装php5
+tar –zxvf php-5.2.9.tar.gz
+./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache/bin/apxs --with-libxml-dir=/usr/local/libxml2/ --with-gd=/usr/local/gd2/ --with-jpeg-dir=/usr/local/jpeg6/ --with-png=/usr/local/lib --with-zlib-dir=/usr/lib/ --with-freetype-dir=/usr/local/freetype --with-curl=/usr/local/curl/ --with-xsl=/usr/local/libxslt --enable-xslt
+make && make install
+4.4配置文件
+cp php.ini-dist /usr/local/lib/php.ini
+五．重新配置Apache
+5.1. vi /usr/local/apache/conf/httpd.conf
+5.1.1找到 AddType application/x-gzip .gz .tgz在其下面添加一行
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
+ 
+5.1.1找到  DirectoryIndex index.html修改为：
+DirectoryIndex index.html default.php index.php
+5.2设置php文件后缀
+Vi /usr/local/lib/php.ini
+找到register-globals这一行修改成：
+ register-globals=on
+5.3第一个php程序
+vi /usr/local/apache/htdocs/test.php
+文件内容为：
+<?
+       Phpinfo();
+?>
+5.4重启apache服务
+service httpd restart
+5.5检验是否成功
+在IE中输入如下网址
+http://www.dong.com/test.php
+看到php的有关配置信息就证明成功了。
+2安装配置mantis
+一．安装mantis
+1.1将mantis解压到/usr/local/apache/htdocs目录下。
+1.2生成：mantis配置文件：
+   cp  config_inc.php.sample config_inc.php
+1.3生成数据库；
+   http://www.dong.com/mantis/admin/install.php
+凡是mantis 1.0.0a2以后的版本生成数据库都比较简单，只需要上面那个网址就可以。
+1.4对bugtracker赋权限：
+   grant all privileges on bugtracker.* to mantisdbuser@localhost    identified by "";
+1.5.登录：
+IE中输入：http://www.dong.com/mantis
+用户名：administrator
+密码：root
+二.安装配置sendmail
+请参见：Linux初学者Sendmail配置指南
+http://blog.sina.com.cn/s/blog_4b086af10100c2ca.html
+ 
+三.安装配置phpmailer
+安装包的获取：http://phpmailer.sourceforge.net
+解压此安装包后到/var/phpmailer
+3.1拷贝文件到include_path路径下
+将此安装包的class.smtp.php 和class.phpmailer.php文件拷贝到php的include_path所包含的路径下。
+3.2配置mantis的配置文件：config_inc.php
+增加：
+$g_smtp_host=’www.dong.com’;  #mail server的地址
+$g_phpMailer_method=2;
+$g_return_path_email=’test1@dong.com’; #你的一个邮箱账户
+$g_administrator_email='root@localhost';
+$g_from_email='root@localhost';
+ 
+3.3配置php.ini的配置文件:vi /usr/local/lib/php.ini
+在#include_path下面一行增加：
+Include_path=”.:/usr/local/php/lib/php/”
+ 
+四.安装配置jpgraph
+ 
+4.1安装jpgraph库（jpgraph-2.3.4.tar.gz） http://www.aditus.nu/jpgraph/jpdownload.php
+tar –zxvf  jpgraph-2.3.4.tar.gz
+拷贝解压后 jpgraph到mantis目录下
+4.2配置gd_image.inc.php
+打开/mantis/jpgraph/src/gd_image.inc.php 文件
+注释if else语句
+　function SetAntiAliasing($aFlg=true) {
+　　$this->use_anti_aliasing = $aFlg;
+　　
+　　}
+4.3 配置jpgraph_ttf.inc.php
+打开 /mantis/jpgraph/src /jpgraph_ttf.inc.php 文件
+注释 elseif语句
+ 
+4.4 配置graph_api.php
+打开 /mantis/core/graph_api.php文件
+找到 graph_get_font()函数添加
+'chinese_gbk' => FF_SIMSUN,
+
+4.4 配置config_inc.php
+打开 /mantis/config_inc.php文件
+添加 $g_graph_font = 'chinese_gbk';
+添加  $g_use_jpgraph   = ON;
+$g_jpgraph_path   =’’;//引号内添加jpgraph的位置
+  
+ 
+
+ PHP编译找不到mysql头文件：CentOS下载mysql-devel安装  yum install mysql-devel
+
+ '/usr/local/apache/htdocs/mantis/library/adodb/drivers/adodb-mysql.inc.php' line 365 
+
+ 管理员用户密码：administrator/administrator

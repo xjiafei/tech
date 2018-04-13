@@ -1,0 +1,12 @@
+U盘启动   启动优先U盘启动  选择U盘镜像文件install.img
+
+
+later:
+网络：vi /etc/sysconfig/network-scripts/ifcfg-eth0
+ONBOOT=yes
+NM_CONTROLLED=yes	//network manager控制 不可修改no
+BOOTPROTO=static	//静态IP
+IPADDR=192.168.1.111
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1 
+DNS1=192.168.1.1   //不设置上不了外网

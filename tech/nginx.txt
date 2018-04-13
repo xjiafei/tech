@@ -1,0 +1,11 @@
+tar -zxvf nginx-1.5.9.tar.gz 
+./configure --prefix=/usr/local/nginx
+-- yum -y install pcre-devel
+-- yum -y install openssl openssl-devel
+make
+make install
+
+启动：nginx/sbin/nginx -t
+
+
+Nginx配置是否正确：/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf

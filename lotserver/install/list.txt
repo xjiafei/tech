@@ -1,0 +1,11 @@
+查看linux的内核版本：	uname -a   
+			more /etc/issue
+			cat /proc/version
+			more /etc/redhat-release
+
+/usr/local/php/bin/php -i | grep configure
+Configure Command =>  './configure'  '--prefix=/usr/local/php' '--with-config-file-path=/usr/local/php/etc' '--enable-inline-optimization' '--with-zlib' '--with-gd' '--enable-mbstring' '--with-iconv' '--with-gmp' '--with-mysql=/usr/local/mysql' '--with-mysqli=/usr/local/mysql/bin/mysql_config' '--disable-debug' '--enable-posix' '--disable-rpath' '--disable-dmalloc' '--enable-bcmath' '--enable-gd-native-ttf' '--enable-sysvsem' '--enable-sysvshm' '--enable-sockets' '--enable-wddx' '--with-curl' '--with-freetype-dir=/usr/lib' '--enable-fpm' '--with-jpeg-dir=/usr/lib/' '--with-png-dir=/usr/lib/'
+
+
+/usr/local/nginx/sbin/nginx -V
+configure arguments: --prefix=/usr/local/nginx --user=nobody --group=nobody --with-http_ssl_module --with-http_stub_status_module --add-module=/root/src/ngx_cache_purge-2.3

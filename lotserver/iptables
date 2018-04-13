@@ -1,0 +1,48 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -p tcp -m tcp --tcp-flags SYN,ACK SYN,ACK -m state --state NEW -j REJECT --reject-with tcp-reset 
+-A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j REJECT --reject-with tcp-reset 
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT 
+-A INPUT -i lo -j ACCEPT 
+
+###from RCBC_T1
+-A INPUT -s 203.208.27.240/28  -m state --state NEW -j ACCEPT
+-A INPUT -s 203.208.29.200/29  -m state --state NEW -j ACCEPT
+
+-A INPUT -p icmp -m icmp --icmp-type 8 -m limit --limit 1/sec --limit-burst 10 -j ACCEPT
+
+###for nfs client
+#-A INPUT -s 192.168.6.195/32 -p tcp -m multiport --dports 111,2049,10001,10002,10003,10004 -j ACCEPT
+#-A INPUT -s 192.168.6.195/32 -p udp -m multiport --dports 111,2049,10001,10002,10003,10004 -j ACCEPT
+
+###for other server
+-A INPUT -s 192.168.6.71/32 -m state --state NEW -j ACCEPT
+-A INPUT -s 192.168.6.199/32 -m state --state NEW -j ACCEPT
+-A INPUT -s 192.168.6.195/32 -m state --state NEW -j ACCEPT
+-A INPUT -s 192.168.6.198/32 -m state --state NEW -j ACCEPT
+
+###from PPTP
+-A INPUT -s 43.252.208.62/32 -p tcp -m tcp -m multiport --dports 22897 -m state --state NEW -j ACCEPT
+
+COMMIT
+
+----------------------version 2-------------------------------
+*filter
+#默认INPUT 的策略是DROP 即拒绝所有的外来请求
+:INPUT DROP [0:0]
+#一般情况下用不到FORWARD 可以配置为默认DROP
+:FORWARD DROP [0:0]
+#本机对其他机器访问设置为默认ACCEPT
+:OUTPUT ACCEPT [0:0]
+#允许已经建立和相关的连接
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#允许icmp协议(即ping)
+-A INPUT -p icmp -j ACCEPT
+#允许回环请求
+-A INPUT -i lo -j ACCEPT
+#开放端口22 80(如果要开放其他端口 继续添加开放规则即可)
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+COMMIT

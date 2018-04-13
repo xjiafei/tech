@@ -1,0 +1,50 @@
+	-------自主彩上线 步骤--
+1.执行sql:执行game\src\main\resources\sql\oracle\下7个*_DATA.sql
+	  执行game\src\main\resources\sql\oracle\下jiaoben.sql
+2.发布firefrog、firefrog-phone
+  发布game、game-chart、game-web、game-task
+  发布php-backend php-frontend
+  发布mp-interface mp-moblieAdmin
+  发布static
+
+本次修改内容：
+1.Web - 增加自主彩；增加手机下载页面
+2.增加手机APP玩法
+
+*********************************************************************
+1.pre-action: 关停测试与生产环境
+	测试挂停195 nginx
+	生产挂停先 41 nginx从  后  31 nginx主 
+	数据备份  who？？
+2.DB操作：
+	-- 执行game\src\main\resources\sql\oracle\下7个*_DATA.sql   
+	执行game\src\main\resources\sql\oracle\下jiaoben.sql
+	钻石玩法赔率修改？？
+3.部署MP服务器
+	php相关
+	mysql安装、数据初始化
+4.部署自开奖服务器（先不启动） 97
+  权限：
+  game->server97 18077
+  server97 18077->game
+  server97 18077->oracle 1521
+  数据：清空Redis数据，修改添加连接正式服务器的url（application. Properties）
+
+5.发布代码  (Action  Gary)
+   发布firefrog、firefrog-phone  
+  发布game、game-chart、game-web、game-task  
+  发布php-backend php-frontend  
+  发布mp-interface mp-moblieAdmin  
+  发布static
+   注意： 
+   a. 首页需要断开 “1分时时彩”、“自开时时彩”、“自开11/5” 跳到投注页面的链接  （Action David） 
+   b. 假如dynamic 加载慢game_web 请求game变内网直连 
+6.手机APP下载相关操作 （Action David）
+a.	手机端滚动播放图片：MP, Mysql数据库数据修改 
+b.	https 连接配置 供iOS APK下载 
+c.	APK下载页面 链接写死的  （Action Allen）
+
+7.检查定时执行的脚本是否正常（代理奖金统计）
+	crontab -l
+	crontab -e
+ 

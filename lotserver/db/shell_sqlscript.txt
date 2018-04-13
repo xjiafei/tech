@@ -1,0 +1,55 @@
+crontab -l
+crontab -e
+#################################################################################
+50 1 * * * /home/oracle/script/baobiao.sh MPDB mpadmin > /dev/null
+55 1 * * * /home/oracle/script/baobiao.sh WQCDEV mpadmin > /dev/null
+15 3 * * * /home/oracle/script/baobiao2.sh MPDB mpadmin > /dev/null
+20 3 * * * /home/oracle/script/baobiao2.sh WQCDEV mpadmin > /dev/null
+10 6 * * * /home/oracle/script/execute_sql.sh MPDB mpadmin arch_group_message.sql  > /dev/null
+15 6 * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin arch_group_message.sql  > /dev/null
+10 7 * * * /home/oracle/script/execute_sql.sh MPDB mpadmin game_event.sql  > /dev/null
+15 7 * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin game_event.sql  > /dev/null
+### 明細報表 與派獎有關時間不可太早執行
+25 * * * * /home/oracle/script/execute_sql.sh MPDB mpadmin mview_user_agent_count.sql    > /dev/null
+28 * * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin mview_user_agent_count.sql  > /dev/null
+### 總代明細報表
+31 * * * * /home/oracle/script/execute_sql.sh MPDB mpadmin gameOrderReport.sql  > /dev/null
+34 * * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin gameOrderReport.sql  > /dev/null
+### 上下級對應表
+38 * * * * /home/oracle/script/execute_sql.sh MPDB mpadmin user_customer_for_report_temp.sql > /dev/null
+41 * * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin user_customer_for_report_temp.sql > /dev/null
+### 總代代理平台
+10 7 * * * /home/oracle/script/execute_sql.sh MPDB mpadmin  report_detail_for_agent.sql > /dev/null
+15 7 * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin report_detail_for_agent.sql > /dev/null
+#### 沉默帳號排程
+0 7 * * * /home/oracle/script/execute_sql.sh  MPDB mpadmin GLOBAL_GRAYLIST.sql  >  /dev/null
+5 7 * * * /home/oracle/script/execute_sql.sh  WQCDEV mpadmin GLOBAL_GRAYLIST.sql  >  /dev/null
+#### USER_ACTIVITY_GIFTS每小時的活動禮金排程 
+10 * * * * /home/oracle/script/execute_sql.sh MPDB mpadmin user_activity_gifts.sql > /dev/null
+13 * * * * /home/oracle/script/execute_sql.sh WQCDEV mpadmin user_activity_gifts.sql > /dev/null
+
+
+
+
+----------product-------
+0 5 * * * /home/oracle/backup/backupdb.sh  > /dev/null
+6 7 * * * /home/oracle/backup/deletearchivelog.sh > /dev/null
+### 授權
+10 7,13-18 * * * /home/oracle/script/exe_grant_sql.sh grant_role_privs.sql  > /dev/null
+#################################################################################
+50 1 * * * /home/oracle/script/baobiao.sh
+15 3 * * * /home/oracle/script/baobiao2_v1.sh
+10 6 * * * /home/oracle/script/execute_sql.sh arch_group_message.sql  > /dev/null
+10 7 * * * /home/oracle/script/execute_sql.sh game_event.sql > /dev/null
+### 明細報表 與派獎有關時間不可太早執行
+25 * * * * /home/oracle/script/execute_sql.sh mview_user_agent_count.sql  > /dev/null
+### 總代明細報表
+30 * * * * /home/oracle/script/execute_sql.sh gameOrderReport.sql  > /dev/null
+### 上下級對應表
+35 * * * * /home/oracle/script/execute_sql.sh user_customer_for_report_temp.sql > /dev/null
+### 總代代理平台
+10 7 * * * /home/oracle/script/execute_sql.sh report_detail_for_agent.sql > /dev/null
+#### 沉默帳號排程
+0 7 * * * /home/oracle/script/execute_sql.sh GLOBAL_GRAYLIST.sql  >  /dev/null
+#### USER_ACTIVITY_GIFTS每小時的活動禮金排程 
+10 * * * * /home/oracle/script/execute_sql.sh user_activity_gifts.sql > /dev/null

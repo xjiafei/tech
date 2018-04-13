@@ -1,0 +1,5 @@
+WQC:
+#mowcum
+mownum_url=http://mow.apiwqc/Mownecum_api/
+company_id=48
+config=MpwQQ20160503pWD!@#

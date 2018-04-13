@@ -1,0 +1,13 @@
+http://www.oracle.com/technetwork/java/archive-139210.html
+
+大数据导入导出:sqoop工具
+
+
+
+1.restful (版本控制、oAuth2.0）
+2.maven. modules  http://blog.csdn.net/jiangkai528/article/details/24798943
+
+
+
+
+秒杀：站点层设计   请求队列实现？

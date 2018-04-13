@@ -1,0 +1,12 @@
+trunk修改  branches修改  合并出现树目录冲突
+1.先标记已解决
+2.删除本地文件
+3.拷贝文件至本地
+4.提交
+
+trunk svn:ignore  合并不过来  添加不了svn版本控制
+1.多合并几次 直到可以 添加svn版本控制
+
+
+
+访存历史记录报错item not reachable：anon-access=none

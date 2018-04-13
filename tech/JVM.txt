@@ -1,0 +1,8 @@
+jmap -histo
+B代表byte 
+C代表char 
+D代表double 
+F代表float 
+I代表int 
+J代表long 
+Z代表boolean 

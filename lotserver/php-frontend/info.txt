@@ -1,0 +1,9 @@
+独立nginx
+geoip:/usr/local/conf
+
+用户访问控制：CustomControllerAction.php
+
+登录(session cookie)：application\modules\default\controllers\LoginController.php
+
+
+svn:https://192.168.6.4/svn/wqc/software/trunk/php/frontend

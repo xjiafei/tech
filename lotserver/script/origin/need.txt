@@ -1,0 +1,1 @@
+1.了解MPinterface和admin分别职责

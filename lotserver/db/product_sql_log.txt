@@ -1,0 +1,74 @@
+2017/6/28 ----
+create table game_issue_bk20170628 as 
+select * from game_issue;
+update game_issue set sale_start_time=sale_start_time+5/(24*60),sale_end_time=sale_end_time+5/(24*60),open_draw_time=open_draw_time+5/(24*60),update_time=sysdate
+where lotteryid=99201 and web_issue_code between 831220 and 831357;
+delete from game_issue where web_issue_code>='831358';
+commit;
+
+2017/4/6---------- 去掉AND a.gmt_created > SYSDATE - 16
+CREATE OR REPLACE VIEW VIEW_FUND_CHANGE_LOG AS
+SELECT a."ID",
+          a.plan_code,
+          a.note,
+          a.ex_code,
+          a."USER_ID",
+          a."BEFOR_BAL",
+          a."BEFORE_DAMT",
+          a."CT_BAL",
+          a."CT_DAMT",
+          a."REASON",
+          a."OPERATOR",
+          a."FUND_ID",
+          a."SN",
+          a."OLD_FREEZE_AMT",
+          a."CURRENT_FREEZE_AMT",
+          a."GMT_CREATED",
+          a."FUND_SN",
+          a."ISACLUSER",
+          a."ISVISIBLEBYFRONTUSER",
+          a.before_avail_bal,
+          a.ct_avail_bal,
+          b.account,
+          b.user_chain
+     FROM fund_change_log a, user_customer b
+    WHERE a.user_id = b.id;
+
+2017/3/30---------------------------
+create table game_issue_bk20170330 as 
+select * from game_issue;
+update game_issue set sale_start_time=sale_start_time+95/(24*60),sale_end_time=sale_end_time+95/(24*60),open_draw_time=open_draw_time+95/(24*60),update_time=sysdate
+where lotteryid=99201 and web_issue_code between 815170 and 815248;
+commit;
+
+
+SQL> select count(1) from game_issue where lotteryid=99201 and web_issue_code>815248 and sale_end_time>sysdate;
+
+  COUNT(1)
+----------
+       735
+SQL> delete from game_issue where lotteryid=99201 and web_issue_code>815248 and sale_end_time>sysdate;
+
+735 rows deleted.
+SQL> commit;
+
+Commit complete.
+
+2017/12/21   ---------重置安全密码为空--------
+SQL> select qu_struc from user_customer where account='chenling88';
+
+QU_STRUC
+--------------------------------------------------------------------------------
+[{"qu":1,"ans":"d8b0661da3eb9c167dd9157702a6212a"},{"qu":2,"ans":"d8b0661da3eb9c
+167dd9157702a6212a"},{"qu":3,"ans":"d8b0661da3eb9c167dd9157702a6212a"}]
+
+update user_customer set qu_struc=null where account='chenling88';
+
+
+2017/12/22   --更新历史错误数据  高频骰宝 奖期状态强制7
+update GAME_ISSUE set status=7  
+--create table GAME_ISSUE_1222 as select * from GAME_ISSUE
+where  LOTTERYID in (99602 ,99603)
+    and status = 2  
+    and SALE_END_TIME <= sysdate  and issue_code like '2017121%' and number_record is null 
+    and (TRY_GET_NUMBER_COUNT is null or TRY_GET_NUMBER_COUNT < 4)

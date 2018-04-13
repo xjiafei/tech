@@ -1,0 +1,115 @@
+1.sh 导入dmp到实例WQCDEV 的FIREFROG/FIREFROG用户密码下
+
+监听：lsnrctl status 监听状态
+	/u01/app/oracle/diag/tnslsnr/localhost/listener/trace/listener.log
+	/u01/app/oracle/product/11.2.0/dbhome_1/network/admin/listener.ora	
+	/u01/app/oracle/diag/tnslsnr/localhost/listener/alert/log.xml
+实例日志：/u01/app/oracle/diag/rdbms/mpdb/MPDB/trace
+
+select * from v$diag_info;
+/u01/app/oracle/diag/rdbms/mpdb/MPDB/trace/alert_{SID}.log
+
+log:/u01/app/oracle/oradata
+
+
+
+
+1.查询系统使用的是哪一组日志文件：
+select * from v$log;
+2.查询正在使用的组所对应的日志文件：
+select * from v$logfile;
+3.强制日志切换：
+alter system switch logfile;
+4.查询历史日志：
+select * from v$log_history;
+5.查询日志的归档模式：
+select dbid,name,created,log_mode from v$database;
+6.查询归档日志的信息：
+select recid,stamp,thread#,sequence#,name from v$archived_log;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT a.tablespace_name "表空间名", 
+total "表空间大小", 
+free "表空间剩余大小", 
+(total - free) "表空间使用大小", 
+total / (1024 * 1024 * 1024) "表空间大小(G)", 
+free / (1024 * 1024 * 1024) "表空间剩余大小(G)", 
+(total - free) / (1024 * 1024 * 1024) "表空间使用大小(G)", 
+round((total - free) / total, 4) * 100 "使用率 %" 
+FROM (SELECT tablespace_name, SUM(bytes) free 
+FROM dba_free_space 
+GROUP BY tablespace_name) a, 
+(SELECT tablespace_name, SUM(bytes) total 
+FROM dba_data_files 
+GROUP BY tablespace_name) b 
+WHERE a.tablespace_name = b.tablespace_name 
+
+
+--1、查看表空间的名称及大小 
+SELECT t.tablespace_name, round(SUM(bytes / (1024 * 1024)), 0) ts_size(M)
+FROM dba_tablespaces t, dba_data_files d 
+WHERE t.tablespace_name = d.tablespace_name 
+GROUP BY t.tablespace_name; 
+--2、查看表空间物理文件的名称及大小 
+SELECT tablespace_name, 
+file_id, 
+file_name, 
+round(bytes / (1024 * 1024), 0) total_space(M)
+FROM dba_data_files 
+ORDER BY tablespace_name; 
+--3、查看回滚段名称及大小 
+SELECT segment_name, 
+tablespace_name, 
+r.status, 
+(initial_extent / 1024) initialextent, 
+(next_extent / 1024) nextextent, 
+max_extents, 
+v.curext curextent 
+FROM dba_rollback_segs r, v$rollstat v 
+WHERE r.segment_id = v.usn(+) 
+ORDER BY segment_name; 
+--4、查看控制文件 
+SELECT NAME FROM v$controlfile; 
+--5、查看日志文件 
+SELECT MEMBER FROM v$logfile; 
+--6、查看表空间的使用情况 
+SELECT SUM(bytes) / (1024 * 1024) AS free_space, tablespace_name 
+FROM dba_free_space 
+GROUP BY tablespace_name; 
+SELECT a.tablespace_name, 
+a.bytes total, 
+b.bytes used, 
+c.bytes free, 
+(b.bytes * 100) / a.bytes "% USED ", 
+(c.bytes * 100) / a.bytes "% FREE " 
+FROM sys.sm$ts_avail a, sys.sm$ts_used b, sys.sm$ts_free c 
+WHERE a.tablespace_name = b.tablespace_name 
+AND a.tablespace_name = c.tablespace_name; 
+--7、查看数据库库对象 
+SELECT owner, object_type, status, COUNT(*) count# 
+FROM all_objects 
+GROUP BY owner, object_type, status; 
+--8、查看数据库的版本　 
+SELECT version 
+FROM product_component_version 
+WHERE substr(product, 1, 6) = 'Oracle'; 
+--9、查看数据库的创建日期和归档方式 
+SELECT created, log_mode, log_mode FROM v$database; 
